@@ -13,8 +13,8 @@ class UserController {
         );
       }
      // витягуємо з тіла імейл, пароль та передаємо їх у функцію реєстрації
-      const { email, password } = req.body;
-      const userData = await userService.registration(email, password);
+      const { email, password, name } = req.body;
+      const userData = await userService.registration(email, password, name);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 7 * 24 * 60 * 60 * 1000, // час життя куки 
         httpOnly: true, // прапор, щоб куку не можна було отримувати та змінювати всередині браузера

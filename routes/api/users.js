@@ -4,17 +4,18 @@ const jwt = require("jsonwebtoken");
 const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 
 const { User } = require("../../models");
-const { RegisterSchema, joiLoginSchema } = require("../../models/user");
-const { authenticate } = require("../../middlewares");
+const { SignupSchema, joiLoginSchema } = require("../../models/user");
 
-const { SECRET_KEY } = process.env;
+// const { authenticate } = require("../../middlewares");
+
+const { JWT_SECRET_KEY } = process.env;
 
 const router = express.Router();
 
 // реєстрація користувача з хешуванням пароля
 router.post("/signup", async (req, res, next) => {
   try {
-    const { error } = RegisterSchema.validate(req.body);
+    const { error } = SignupSchema.validate(req.body);
     if (error) {
       throw new BadRequest("Bad request (invalid request body)");
     }
@@ -65,7 +66,7 @@ router.post("/login", async (req, res, next) => {
       id: _id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "30min" });
+    const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: "30min" });
     await User.findByIdAndUpdate(_id, { token });
     res.json({
       token,
@@ -79,19 +80,19 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-// поточний користувач
+/* поточний користувач
 router.get("/current", authenticate, async (req, res, next) => {
   const { _id, email, password, name, token } = req.user;
   res.json({
     user: { _id, email, password, name, token },
   });
-});
+}); */
 
-// розлогування
+/* розлогування
 router.get("/logout", authenticate, async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(204).send();
-});
+}); */
 
 module.exports = router;
