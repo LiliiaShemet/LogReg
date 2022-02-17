@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 
-const { User } = require("../../models");
+const { User } = require("../../models/user");
 const { SignupSchema, joiLoginSchema } = require("../../models/user");
 
 // const { authenticate } = require("../../middlewares");
@@ -11,6 +11,7 @@ const { SignupSchema, joiLoginSchema } = require("../../models/user");
 const { JWT_SECRET_KEY } = process.env;
 
 const router = express.Router();
+
 
 // реєстрація користувача з хешуванням пароля
 router.post("/signup", async (req, res, next) => {
@@ -51,7 +52,7 @@ router.post("/login", async (req, res, next) => {
     if (error) {
       throw new BadRequest(error.message);
     }
-    const { email, password } = req.body;
+    const { email, password,} = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       throw Unauthorized("Email or password is wrong");
@@ -81,14 +82,14 @@ router.post("/login", async (req, res, next) => {
 });
 
 /* поточний користувач
-router.get("/current", authenticate, async (req, res, next) => {
+router.get("/currentUser", authenticate, async (req, res, next) => {
   const { _id, email, password, name, token } = req.user;
   res.json({
     user: { _id, email, password, name, token },
   });
-}); */
+}); 
 
-/* розлогування
+// розлогування
 router.get("/logout", authenticate, async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
