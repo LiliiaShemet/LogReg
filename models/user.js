@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-
 // eslint-disable-next-line no-useless-escape
 const emailRegexp = /^\w+([\.-]?\w+)+@\w+([\.:]?\w+)+(\.[a-zA-Z0-9]{2,3})+$/;
 
@@ -26,7 +25,7 @@ const userSchema = Schema(
      default: null,
     },
 
- verify: {
+  verify: {
  type: Boolean,
   default: false,
         },
@@ -34,16 +33,15 @@ const userSchema = Schema(
 verificationToken: {
   type: String,
    required: [true, "Verify token is required"],
-},
+}, 
   },
    { versionKey: false, timestamps: true }
  );
-
  const joiSignupSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
    password: Joi.string().min(6).max(12).required(),
 name: Joi.string().min(1).max(12),
-token: Joi.string(),
+
 });
 
  const joiLoginSchema = Joi.object({
@@ -51,6 +49,7 @@ token: Joi.string(),
 password: Joi.string().min(6).max(12).required(),
 });
 
+ 
  const User = model("user", userSchema);
 
 module.exports = {
