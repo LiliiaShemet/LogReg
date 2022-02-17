@@ -28,7 +28,12 @@ class UserService {
       activationLink,
     });
 
-    
+    // відправка листа
+    // await mailService.sendActivationMail(
+    //   email,
+    //   `${process.env.DOMAIN}/api/activate/${activationLink}`
+    // );
+
     const userDto = new UserDto(user);
     // функція генерації токена, зберігаємо рефреш токен в БД
     const tokens = tokenService.generateTokens({ ...userDto });
