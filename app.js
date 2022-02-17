@@ -19,7 +19,7 @@ app.use(express.json()); // для відправки в джейсон
 
 // 
 // app.use(cookieParser());
-app.use("api/users", usersRouter);
+app.use("/api/users", usersRouter)
 
  // app.use(errorMiddleware);
 
