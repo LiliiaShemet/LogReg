@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 
 const { User } = require("../../models/user");
-const { SignupSchema, joiLoginSchema } = require("../../models/user");
+const { joiSignupSchema, joiLoginSchema } = require("../../models/user");
 
 // const { authenticate } = require("../../middlewares");
 
@@ -16,10 +16,10 @@ const router = express.Router();
 // реєстрація користувача з хешуванням пароля
 router.post("/signup", async (req, res, next) => {
   try {
-    const { error } = SignupSchema.validate(req.body);
+   const { error } = joiSignupSchema.validate(req.body);
     if (error) {
       throw new BadRequest("Bad request (invalid request body)");
-    }
+    } 
     const { email, password, name } = req.body;
     const user = await User.findOne({ email });
     if (user) {
