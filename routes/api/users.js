@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-;
+const { nanoid } = require("nanoid");
 
 const { BadRequest, Conflict, Unauthorized } = require("http-errors");
 
@@ -13,6 +13,7 @@ const { joiSignupSchema, joiLoginSchema } = require("../../models/user");
 const { JWT_SECRET_KEY } = process.env;
 
 const router = express.Router();
+const verificationToken = nanoid();
 
 
 // реєстрація користувача з хешуванням пароля
@@ -33,6 +34,7 @@ router.post("/signup", async (req, res, next) => {
       email,
       password: hashPass,
       name,
+       verificationToken,
     });
 
     res.status(201).json({
